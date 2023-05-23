@@ -43,7 +43,6 @@ function(source_map_consumer) {
     var uri;
     var expected_fields;
     var regex;
-    var skip_lines;
 
     var fetcher = new Fetcher(opts);
 
@@ -61,17 +60,14 @@ function(source_map_consumer) {
     }
 
     if (traceFormat === "chrome") {
-      regex = /^ +at.+\((.*):([0-9]+):([0-9]+)/;
+      regex = /^ +at.*\/([^\/]*):([0-9]+):([0-9]+)/;
       expected_fields = 4;
-      // (skip first line containing exception message)
-      skip_lines = 1;
     } else {
       regex = /@(.*):([0-9]+):([0-9]+)/;
       expected_fields = 4;
-      skip_lines = 0;
     }
 
-    lines = stack.split("\n").slice(skip_lines);
+    lines = stack.split("\n");
 
     for (var i=0; i < lines.length; i++) {
       line = lines[i];
